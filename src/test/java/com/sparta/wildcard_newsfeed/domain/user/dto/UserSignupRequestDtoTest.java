@@ -14,6 +14,7 @@ import static com.sparta.wildcard_newsfeed.exception.validation.ValidationGroups
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@DisplayName("회원가입 DTO 검증")
 class UserSignupRequestDtoTest {
 
     private static Validator validator;

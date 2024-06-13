@@ -1,6 +1,6 @@
 package com.sparta.wildcard_newsfeed.domain.user.dto;
 
-import com.sparta.wildcard_newsfeed.exception.validation.ValidationGroups;
+import com.sparta.wildcard_newsfeed.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -9,10 +9,8 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import org.hibernate.validator.constraints.Length;
 
 import static com.sparta.wildcard_newsfeed.exception.validation.ValidationGroups.*;
-import static com.sparta.wildcard_newsfeed.exception.validation.ValidationGroups.SizeGroup;
 
 @Getter
 @Builder
@@ -43,5 +41,13 @@ public class UserSignupRequestDto {
     @NotBlank(groups = NotBlankGroup.class,
             message = "이메일을 입력해주세요.")
     private String email;
+
+    public User toUserDomain() {
+        return User.builder()
+                .usercode(usercode)
+                .password(password)
+                .email(email)
+                .build();
+    }
 
 }

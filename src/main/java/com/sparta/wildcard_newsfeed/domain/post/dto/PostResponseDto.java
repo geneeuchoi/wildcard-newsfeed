@@ -3,10 +3,12 @@ package com.sparta.wildcard_newsfeed.domain.post.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sparta.wildcard_newsfeed.domain.post.entity.Post;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Setter
 @Getter
 public class PostResponseDto {
     private Long id;

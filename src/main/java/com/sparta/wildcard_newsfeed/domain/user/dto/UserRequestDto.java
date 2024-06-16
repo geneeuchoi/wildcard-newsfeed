@@ -4,7 +4,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
+import lombok.Setter;
 
+//테스트용 세터
+@Setter
 @Getter
 public class UserRequestDto {
 

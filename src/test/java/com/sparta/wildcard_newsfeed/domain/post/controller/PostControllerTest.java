@@ -1,29 +1,44 @@
 package com.sparta.wildcard_newsfeed.domain.post.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparta.wildcard_newsfeed.config.WebSecurityConfig;
+import com.sparta.wildcard_newsfeed.domain.comment.controller.CommentController;
+import com.sparta.wildcard_newsfeed.domain.comment.service.CommentService;
 import com.sparta.wildcard_newsfeed.domain.post.dto.PostPageRequestDto;
 import com.sparta.wildcard_newsfeed.domain.post.dto.PostPageResponseDto;
 import com.sparta.wildcard_newsfeed.domain.post.dto.PostRequestDto;
 import com.sparta.wildcard_newsfeed.domain.post.dto.PostResponseDto;
 import com.sparta.wildcard_newsfeed.domain.post.entity.Post;
+import com.sparta.wildcard_newsfeed.domain.post.repository.PostRepository;
 import com.sparta.wildcard_newsfeed.domain.post.service.PostService;
+import com.sparta.wildcard_newsfeed.domain.user.controller.UserController;
 import com.sparta.wildcard_newsfeed.domain.user.entity.User;
 import com.sparta.wildcard_newsfeed.domain.user.entity.UserRoleEnum;
 import com.sparta.wildcard_newsfeed.domain.user.entity.UserStatusEnum;
+import com.sparta.wildcard_newsfeed.domain.user.service.UserService;
 import com.sparta.wildcard_newsfeed.security.AuthenticationUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -37,7 +52,13 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(PostController.class)
+@WebMvcTest(controllers = PostController.class,
+        excludeFilters = {
+                @ComponentScan.Filter(
+                        type = FilterType.ASSIGNABLE_TYPE,
+                        classes = WebSecurityConfig.class
+                )
+        })
 class PostControllerTest {
 
     @Autowired
@@ -48,6 +69,9 @@ class PostControllerTest {
 
     @MockBean
     private PostService postService;
+
+    @MockBean
+    private CommentService commentService;
 
     @Autowired
     private WebApplicationContext context;

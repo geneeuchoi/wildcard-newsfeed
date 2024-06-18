@@ -2,13 +2,19 @@ package com.sparta.wildcard_newsfeed.domain.comment.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.wildcard_newsfeed.config.WebSecurityConfig;
+import com.sparta.wildcard_newsfeed.domain.comment.controller.CommentController;
 import com.sparta.wildcard_newsfeed.domain.comment.dto.CommentRequestDto;
-import com.sparta.wildcard_newsfeed.domain.comment.dto.CommentResponseDto;
+import com.sparta.wildcard_newsfeed.domain.comment.repository.CommentRepository;
 import com.sparta.wildcard_newsfeed.domain.comment.service.CommentService;
 import com.sparta.wildcard_newsfeed.domain.post.controller.PostController;
+import com.sparta.wildcard_newsfeed.domain.post.repository.PostRepository;
+import com.sparta.wildcard_newsfeed.domain.post.service.PostService;
 import com.sparta.wildcard_newsfeed.domain.user.controller.UserController;
-import com.sparta.wildcard_newsfeed.security.AuthenticationUser;
-import org.junit.jupiter.api.*;
+import com.sparta.wildcard_newsfeed.domain.user.repository.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -22,16 +28,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.time.LocalDateTime;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@WebMvcTest(controllers = {UserController.class, CommentController.class, PostController.class},
+@WebMvcTest(controllers = CommentController.class,
         excludeFilters = {
                 @ComponentScan.Filter(
                         type = FilterType.ASSIGNABLE_TYPE,
@@ -48,6 +52,15 @@ class CommentControllerTest {
 
     @MockBean
     private CommentService commentService;
+
+    @MockBean
+    private PostRepository postRepository;
+
+    @MockBean
+    private UserRepository userRepository;
+
+    @MockBean
+    private CommentRepository commentRepository;
 
     @Autowired
     private WebApplicationContext context;
@@ -70,9 +83,9 @@ class CommentControllerTest {
 
         //when - then
         mockMvc.perform(post("/api/v1/post/1/comment")
-                                .content(postInfo)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .accept(MediaType.APPLICATION_JSON)
+                        .content(postInfo)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -89,9 +102,9 @@ class CommentControllerTest {
 
         //when - then
         mockMvc.perform(put("/api/v1/post/1/comment/1")
-                                .content(postInfo)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .accept(MediaType.APPLICATION_JSON)
+                        .content(postInfo)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
                 .andDo(print());

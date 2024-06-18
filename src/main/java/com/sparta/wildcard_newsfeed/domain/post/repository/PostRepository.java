@@ -7,7 +7,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
 
     @Query(value = "select p.id as postId, u.id as userId, p.title, p.content, u.name, " +
